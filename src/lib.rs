@@ -134,6 +134,9 @@ impl Universe {
 
     let size = (width * self.height) as usize;
     self.cells = FixedBitSet::with_capacity(size);
+    self.prev_cells = FixedBitSet::with_capacity(size);
+
+    self.reset();
   }
 
   pub fn set_height(&mut self, height: u32) {
@@ -141,14 +144,37 @@ impl Universe {
 
     let size = (self.width * height) as usize;
     self.cells = FixedBitSet::with_capacity(size);
+    self.prev_cells = FixedBitSet::with_capacity(size);
+
+    self.reset();
+  }
+
+  pub fn resize(&mut self, width: u32, height: u32) {
+    self.width = width;
+    self.height = height;
+
+    let size = (self.width * self.height) as usize;
+    self.cells = FixedBitSet::with_capacity(size);
+    self.prev_cells = FixedBitSet::with_capacity(size);
+
+    self.reset();
   }
 
   pub fn reset(&mut self) {
-    for i in 0..((self.width * self.height) as usize) { self.cells.set(i, Math::random() > 0.5); }
+    let size = (self.width * self.height) as usize;
+    for i in 0..size {
+      self.cells.set(i, Math::random() > 0.5);
+    }
+
+    self.num_changed = size;
+    self.diff_cells = (0..size as u32).collect();
   }
 
   pub fn clear(&mut self) {
-    self.cells.clear()
+    self.cells.clear();
+    let size = (self.width * self.height) as usize;
+    self.num_changed = size;
+    self.diff_cells = (0..size as u32).collect();
   }
 
   pub fn cells(&self) -> *const u32 {
