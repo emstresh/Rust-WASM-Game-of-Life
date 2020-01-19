@@ -7,11 +7,11 @@ const theme1 = [
 ];
 
 const theme2 = [
-  '#023C40',
-  '#C3979F',
-  '#0AD3FF',
-  '#78FFD6',
-  '#E1FAF9'
+  '#F5EE9E',
+  '#2D728F',
+  '#AB3428',
+  '#F49E4C',
+  '#3B8EA5'
 ];
 
 const root = document.documentElement;
@@ -32,7 +32,7 @@ const theme = (function() {
 
   self.getValue = (varName) => ( root.style.getPropertyValue(varName) );
 
-  self.set(theme1);
+  self.set(theme2);
   return self;
 })();
 
