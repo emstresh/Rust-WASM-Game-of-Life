@@ -21,6 +21,7 @@
         height: 40px;
         border-radius: 20%;
         cursor: pointer;
+        background-color: var(--secondary-color);
       }
       #game {
         height: 100%;
@@ -33,6 +34,8 @@
         justify-content: space-between;
         width: 100%;
         height: 50px;
+        background-color: var(--primary-color);
+        color: var(--tertiary-color);
       }
       #fps {
         position: fixed;
@@ -56,13 +59,13 @@
       <div id="header">
         <h4>Game of Life</h4>
         <div id="controls">
-          <button class="btn-ctrl" id="play-pause"></button>
+          <button class="btn-ctrl" id="play-pause" title="Play Game">▶</button>
           <button class="btn-ctrl" id="reset" title="Reset Game">Reset</button>
           <button class="btn-ctrl" id="clear" title="Clear Board">Clear</button>
         </div>
         <div>
-          <label for="ticks">Ticks</label>
-          <input type="range" id="tickRange" name="ticks" min="1" max="25" value="1">
+          <label for="ticks">Speed</label>
+          <input type="range" id="tickRange" name="ticks" min="1" max="10" value="1">
         </div>
         <div id="color-scheme"></div>
       </div>
