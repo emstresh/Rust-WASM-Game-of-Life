@@ -4,17 +4,27 @@ import { drawGrid, drawCells } from "./js/draw";
 import { theme } from "./js/themes";
 import { fps } from "./js/stats";
 
-const CELL_SIZE = 10; // px
+const CELL_SIZE = 15; // px
+
+const calculateDimensions = () => {
+  const board = document.getElementById('game-board');
+  const width = board.clientWidth;
+  const height = board.clientHeight;
+
+  const universeWidth = Math.floor(width / (CELL_SIZE + 1));
+  const universeHeight = Math.floor(height / (CELL_SIZE + 1));
+
+  return [ universeWidth, universeHeight ];
+};
 
 const gameState = (function() {
   let self = {};
 
   // initialize a new universe
-  const universe = Universe.new(64, 64);
-  const width = universe.width();
-  const height = universe.height();
-  const cellsPtr = universe.cells();
-  const diffCellsPtr = universe.diff_cells();
+  let dimensions = calculateDimensions();
+  const universe = Universe.new(dimensions[0], dimensions[1]);
+  let width = universe.width();
+  let height = universe.height();
 
   // get the canvas and its 2d context
   const canvas = document.getElementById('game-of-life-canvas');
@@ -57,13 +67,15 @@ const gameState = (function() {
 
   // play the simulation
   const play = () => {
-    playPauseButton.textContent = '⏸';
+    playPauseButton.textContent = '❙❙';
+    playPauseButton.title = 'Pause';
     renderLoop();
   };
 
   // pause the simulation
   const pause = () => {
     playPauseButton.textContent = '▶';
+    playPauseButton.title = 'Play';
     cancelAnimationFrame(animationId);
     animationId = null;
   };
@@ -72,6 +84,17 @@ const gameState = (function() {
   const isPaused = () => (
     animationId === null
   );
+
+  const resizeUniverse = () => {
+    if (!isPaused()) pause();
+    dimensions = calculateDimensions();
+    universe.resize(dimensions[0], dimensions[1]);
+    width = universe.width();
+    height = universe.height();
+    canvas.height = (CELL_SIZE + 1) * height + 1;
+    canvas.width = (CELL_SIZE + 1) * width + 1;
+    render();
+  };
 
   playPauseButton.addEventListener('click', (evt) => {
     if (isPaused()) {
@@ -96,14 +119,23 @@ const gameState = (function() {
     ticksPerAnimationStep = parseInt(evt.target.value, 10);
   });
 
+  let resizeTimer;
+  window.onresize = (evt) => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resizeUniverse, 100);
+  };
+
   // render the game board by redrawing the cells that changed since the last frame
   const render = () => {
+    const cellsPtr = universe.cells();
     const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
+    
     const numChanged = universe.num_changed();
+    const diffCellsPtr = universe.diff_cells();
     const diffCells = new Uint32Array(memory.buffer, diffCellsPtr, numChanged);
 
-    drawGrid(ctx, CELL_SIZE, width, height);
     drawCells(ctx, cells, numChanged, diffCells, CELL_SIZE, width);
+    drawGrid(ctx, CELL_SIZE, width, height);
   };
 
   let animationId = null;
@@ -125,15 +157,3 @@ const gameState = (function() {
 
   return self;
 })();
-
-const displayCurrentTheme = () => {
-  const colorSchemeDiv = document.getElementById('color-scheme');
-  for (let i = 0, len = theme.colors.length; i < len; i++) {
-    const colorBox = document.createElement('div');
-    colorBox.style.backgroundColor = theme.colors[i];
-    colorBox.style.width = `${100 / len}%`;
-    colorSchemeDiv.appendChild(colorBox);
-  }
-};
-
-displayCurrentTheme();

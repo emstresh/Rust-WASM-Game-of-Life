@@ -8,7 +8,7 @@ const bitIsSet = (n, arr) => {
 
 export function drawGrid (ctx, cellSize, width, height) {
   ctx.beginPath();
-  ctx.strokeStyle = '#ffff00'; // GRID_COLOR;
+  ctx.strokeStyle = theme.getValue('--tertiary-color');
 
   // Vertical lines
   for (let i = 0; i <= width; i++) {
@@ -21,6 +21,8 @@ export function drawGrid (ctx, cellSize, width, height) {
     ctx.moveTo(0, j * (cellSize + 1) + 1);
     ctx.lineTo((cellSize + 1) * width + 1, j * (cellSize + 1) + 1);
   }
+
+  ctx.stroke();
 }
 
 export function drawCells(ctx, cells, numChanged, diffCells, cellSize, width) {
