@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello wasm-pack!</title>
+    <style>
+      body {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      button {
+        width: 40px;
+        height: 40px;
+        border-radius: 20%;
+        cursor: pointer;
+      }
+      #game {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      #header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 50px;
+      }
+      #fps {
+        position: fixed;
+        right: 25px;
+        top: 75px;
+        white-space: pre;
+        font-family: monospace;
+      }
+      #color-scheme {
+        display: flex;
+        width: 250px;
+        height: 50px;
+      }
+      .btn-ctrl {
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="header">
+        <h4>Game of Life</h4>
+        <div id="controls">
+          <button class="btn-ctrl" id="play-pause"></button>
+          <button class="btn-ctrl" id="reset" title="Reset Game">Reset</button>
+          <button class="btn-ctrl" id="clear" title="Clear Board">Clear</button>
+        </div>
+        <div>
+          <label for="ticks">Ticks</label>
+          <input type="range" id="tickRange" name="ticks" min="1" max="25" value="1">
+        </div>
+        <div id="color-scheme"></div>
+      </div>
+      <div>
+        <canvas id="game-of-life-canvas"></canvas>
+        <div id="fps"></div>
+      </div>
+    </div>
+    <script src="./bootstrap.js"></script>
+  </body>
+</html>
