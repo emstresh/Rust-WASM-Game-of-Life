@@ -48,6 +48,14 @@
       #controls {
         padding: 0 10px;
       }
+      #instructions {
+        position: fixed;
+        left: 25px;
+        top: 75px;
+        white-space: pre;
+        font-family: monospace;
+        background: rgba(192, 192, 192, 0.5);
+      }
       #fps {
         position: fixed;
         right: 25px;
@@ -83,6 +91,14 @@
       </div>
       <div id="game-board">
         <canvas id="game-of-life-canvas"></canvas>
+        <div id="instructions">
+'f' to play/pause
+'r' to reset
+'v' to clear
+click to toggle
+cmd+click to insert glider
+shift+click to insert pulsar
+        </div>
         <div id="fps"></div>
       </div>
     </div>
