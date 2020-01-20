@@ -1,17 +1,18 @@
-const theme1 = [
-  '#8a5e4b',
-  '#301c2a',
-  '#5b1036',
-  '#7c3e4f',
-  '#bb9564'
-];
-
-const theme2 = [
-  '#F5EE9E',
-  '#2D728F',
-  '#AB3428',
-  '#F49E4C',
-  '#3B8EA5'
+const themes = [
+  [
+    '#CC8B86',
+    '#F9EAE1',
+    '#AA998F',
+    '#D1BE9C',
+    '#7D4F50'
+  ],
+  [
+    '#56E39F',
+    '#2A1F2D',
+    '#58C1C9',
+    '#59686D',
+    '#3B2C35'
+  ]
 ];
 
 const root = document.documentElement;
@@ -19,7 +20,8 @@ const root = document.documentElement;
 const theme = (function() {
   let self = {};
 
-  self.colors = null;
+  let idx = 0;
+  self.colors = [];
 
   self.set = (newTheme) => {
     root.style.setProperty('--alive-color', newTheme[0]);
@@ -30,9 +32,14 @@ const theme = (function() {
     self.colors = newTheme;
   };
 
+  self.cycleTheme = () => {
+    idx = (idx + 1) % themes.length;
+    self.set(themes[idx]);
+  };
+
   self.getValue = (varName) => ( root.style.getPropertyValue(varName) );
 
-  self.set(theme2);
+  self.set(themes[0]);
   return self;
 })();
 

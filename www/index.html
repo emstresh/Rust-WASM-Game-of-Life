@@ -56,10 +56,8 @@
         font-family: monospace;
         background: rgba(192, 192, 192, 0.5);
       }
-      #color-scheme {
-        display: flex;
-        width: 250px;
-        height: 50px;
+      #change-theme {
+        background-image: linear-gradient(to right, var(--alive-color), var(--dead-color), var(--primary-color), var(--secondary-color), var(--tertiary-color));
       }
       .btn-ctrl {
         margin: 5px;
@@ -73,9 +71,10 @@
       <div id="header">
         <h4>Game of Life</h4>
         <div id="controls">
-          <button class="btn-ctrl" id="play-pause" title="Play">▶</button>
-          <button class="btn-ctrl" id="reset" title="Reset">↺</button>
-          <button class="btn-ctrl" id="clear" title="Clear">×</button>
+          <button class="btn-ctrl" id="play-pause" title="Play (f)">▶</button>
+          <button class="btn-ctrl" id="reset" title="Reset (r)">↺</button>
+          <button class="btn-ctrl" id="clear" title="Clear (v)">×</button>
+          <button class="btn-ctrl" id="change-theme" title="Change theme">.</button>
         </div>
         <div>
           <label for="ticks">Speed</label>

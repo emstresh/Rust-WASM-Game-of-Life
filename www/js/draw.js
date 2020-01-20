@@ -25,7 +25,7 @@ export function drawGrid (ctx, cellSize, width, height) {
   ctx.stroke();
 }
 
-export function drawCells(ctx, cells, numChanged, diffCells, cellSize, width) {
+export function updateCells(ctx, cells, numChanged, diffCells, cellSize, width) {
   ctx.beginPath();
 
   ctx.fillStyle = theme.getValue('--alive-color');
@@ -51,6 +51,42 @@ export function drawCells(ctx, cells, numChanged, diffCells, cellSize, width) {
     const col = idx % width;
 
     if (!bitIsSet(idx, cells)) {
+      ctx.fillRect(
+        col * (cellSize + 1) + 1,
+        row * (cellSize + 1) + 1,
+        cellSize,
+        cellSize
+      );
+    }
+  }
+
+  ctx.stroke();
+}
+
+export function drawAllCells(ctx, cells, cellSize, width) {
+  ctx.beginPath();
+
+  ctx.fillStyle = theme.getValue('--alive-color');
+  for (let i = 0; i < cells.length; i++) {
+    const row = Math.floor(i / width);
+    const col = i % width;
+
+    if (bitIsSet(i, cells)) {
+      ctx.fillRect(
+        col * (cellSize + 1) + 1,
+        row * (cellSize + 1) + 1,
+        cellSize,
+        cellSize
+      );
+    }
+  }
+
+  ctx.fillStyle = theme.getValue('--dead-color');
+  for (let i = 0; i < cells.length; i++) {
+    const row = Math.floor(i / width);
+    const col = i % width;
+
+    if (!bitIsSet(i, cells)) {
       ctx.fillRect(
         col * (cellSize + 1) + 1,
         row * (cellSize + 1) + 1,
