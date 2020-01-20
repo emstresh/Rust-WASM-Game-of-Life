@@ -1,6 +1,6 @@
 import { Universe } from "wasm-game-of-life";
 import { memory } from "wasm-game-of-life/wasm_game_of_life_bg";
-import { drawGrid, drawCells } from "./js/draw";
+import { drawGrid, updateCells, drawAllCells } from "./js/draw";
 import { theme } from "./js/themes";
 import { fps } from "./js/stats";
 
@@ -37,6 +37,7 @@ const gameState = (function() {
   const playPauseButton = document.getElementById('play-pause');
   const resetButton = document.getElementById('reset');
   const clearButton = document.getElementById('clear');
+  const themeButton = document.getElementById('change-theme');
   const tickRange = document.getElementById('tickRange');
 
   // if the user clicks the canvas, we want to either toggle a cell
@@ -80,11 +81,33 @@ const gameState = (function() {
     animationId = null;
   };
 
+  // play/pause toggle
+  const toggle = () => {
+    if (isPaused()) {
+      play();
+    } else {
+      pause();
+    }
+  };
+
+  // reset the universe to a new random layout
+  const reset = () => {
+    universe.reset();
+    render();
+  };
+
+  // clear the board (set all cells to "dead")
+  const clear = () => {
+    universe.clear();
+    render();
+  };
+
   // check whether or not the simulation is paused
   const isPaused = () => (
     animationId === null
   );
 
+  // resize the universe based on window resize
   const resizeUniverse = () => {
     if (!isPaused()) pause();
     dimensions = calculateDimensions();
@@ -96,26 +119,15 @@ const gameState = (function() {
     render();
   };
 
-  playPauseButton.addEventListener('click', (evt) => {
-    if (isPaused()) {
-      play();
-    } else {
-      pause();
-    }
+  playPauseButton.addEventListener('click', toggle);
+  resetButton.addEventListener('click', reset);
+  clearButton.addEventListener('click', clear);
+  themeButton.addEventListener('click', (evt) => {
+    theme.cycleTheme();
+    render(true);
   });
 
-  resetButton.addEventListener('click', (evt) => {
-    universe.reset();
-    render();
-  });
-
-
-  clearButton.addEventListener('click', (evt) => {
-    universe.clear();
-    render();
-  });
-
-  tickRange.addEventListener('change', evt => {
+  tickRange.addEventListener('change', (evt) => {
     ticksPerAnimationStep = parseInt(evt.target.value, 10);
   });
 
@@ -124,9 +136,18 @@ const gameState = (function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(resizeUniverse, 100);
   };
+  window.onkeyup = (evt) => {
+    if (evt.key === 'f') {
+      toggle();
+    } else if (evt.key === 'r') {
+      reset();
+    } else if (evt.key === 'v') {
+      clear();
+    }
+  };
 
   // render the game board by redrawing the cells that changed since the last frame
-  const render = () => {
+  const render = (redrawAll = false) => {
     const cellsPtr = universe.cells();
     const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
     
@@ -134,7 +155,11 @@ const gameState = (function() {
     const diffCellsPtr = universe.diff_cells();
     const diffCells = new Uint32Array(memory.buffer, diffCellsPtr, numChanged);
 
-    drawCells(ctx, cells, numChanged, diffCells, CELL_SIZE, width);
+    if (redrawAll) {
+      drawAllCells(ctx, cells, CELL_SIZE, width);
+    } else {
+      updateCells(ctx, cells, numChanged, diffCells, CELL_SIZE, width);
+    }
     drawGrid(ctx, CELL_SIZE, width, height);
   };
 
