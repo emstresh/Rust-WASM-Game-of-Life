@@ -1,10 +1,10 @@
 const themes = [
   [
-    '#CC8B86',
-    '#F9EAE1',
-    '#AA998F',
-    '#D1BE9C',
-    '#7D4F50'
+    '#EA526F',
+    '#FCEADE',
+    '#FF8A5B',
+    '#25CED1',
+    '#FFFFFF'
   ],
   [
     '#56E39F',
