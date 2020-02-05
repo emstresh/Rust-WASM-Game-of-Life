@@ -1,3 +1,5 @@
+[demo](https://emstresh.github.io/Rust-WASM-Game-of-Life/)
+
 Test Rust/WASM project following [the Rust + WASM book](https://rustwasm.github.io/docs/book/)
 
 To run:
